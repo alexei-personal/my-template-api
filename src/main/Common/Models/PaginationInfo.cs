@@ -1,9 +1,11 @@
-﻿namespace Common.Interfaces;
+﻿using Common.Interfaces;
+
+namespace Common.Dtos;
 
 /// <summary>
-/// pagination basic info interface
+/// basic pagination input info
 /// </summary>
-public interface IPageInfo
+public sealed record PaginationInfo : IPaginationInfo
 {
     /// <summary>
     /// 0-indexed page index
