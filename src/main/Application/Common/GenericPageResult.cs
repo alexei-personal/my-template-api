@@ -22,7 +22,7 @@ public sealed record GenericPageResult<T> : IPaginationInfo
 	public int Total { get; }
 
 	/// <summary>
-	/// 0-indexed page index
+	/// 1-indexed page index
 	/// </summary>
 	public int PageIndex { get; }
 
@@ -45,8 +45,8 @@ public sealed record GenericPageResult<T> : IPaginationInfo
 		PageCount = (int)Math.Ceiling(totalCount / (double) PageSize);
 	}
 
-	public bool HasPrevious => PageIndex > 0;
-	public bool HasNext => PageIndex < PageCount - 1;
+	public bool HasPrevious => PageIndex > 1;
+	public bool HasNext => PageIndex < PageCount;
 
 	public static async Task<GenericPageResult<T>> CreateAsync(IQueryable<T> source, IPaginationInfo pageInfo, CancellationToken token)
 	{

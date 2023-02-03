@@ -8,7 +8,7 @@ namespace Common.Dtos;
 public sealed record PaginationInfo : IPaginationInfo
 {
     /// <summary>
-    /// 0-indexed page index
+    /// 1-indexed page index
     /// </summary>
     public int PageIndex { get; set; }
 

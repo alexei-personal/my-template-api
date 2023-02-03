@@ -12,9 +12,8 @@ namespace Common.Extensions
 		/// <param name="enumerable"></param>
 		/// <param name="sep"></param>
 		/// <returns></returns>
-		public static string GetJoinedStr<TEnt>(this IEnumerable<TEnt> enumerable, string sep = ", ")
+		public static string GetJoinedStr<TEnt>(this IEnumerable<TEnt>? enumerable, string sep = ", ")
 		{
-			// ReSharper disable once NullCoalescingConditionIsAlwaysNotNullAccordingToAPIContract
 			string ret = string.Join(sep, enumerable ?? Enumerable.Empty<TEnt>());
 			return ret;
 		}
@@ -28,11 +27,11 @@ namespace Common.Extensions
 		/// <param name="propSelector"></param>
 		/// <param name="sep"></param>
 		/// <returns></returns>
-		public static string GetJoinedStr<TEnt, TProp>(this IEnumerable<TEnt> enumerable, 
+		public static string GetJoinedStr<TEnt, TProp>(this IEnumerable<TEnt>? enumerable, 
 			Func<TEnt, TProp> propSelector,
 			string sep = ", ")
 		{
-			var list = enumerable
+			var list = (enumerable ?? Enumerable.Empty<TEnt>())
 				.Select(propSelector)
 				.ToList()
 				.Select(e => e?.ToString() ?? "");
@@ -47,8 +46,11 @@ namespace Common.Extensions
 		/// <param name="max">max items to join</param>
 		/// <param name="sep">separator</param>
 		/// <returns></returns>
-		public static string GetJoinedPartialStr<TEnt>(this IEnumerable<TEnt> enumerable, int max = 10, string sep = ", ")
+		public static string GetJoinedPartialStr<TEnt>(this IEnumerable<TEnt>? enumerable, int max = 10, string sep = ", ")
 		{
+			if (enumerable == null || max < 1)
+				return "";
+
 			var list = enumerable.ToList();
 			bool requiresPlus = list.Count > max;
 			var firstItems = list.Take(max);
@@ -67,13 +69,14 @@ namespace Common.Extensions
 		/// <returns></returns>
 		public static IQueryable<T> ApplyPaging<T>(this IQueryable<T> entities, IPaginationInfo pagingInfo, int defaultSize = 10)
 		{
-			int actualPageIndex = Math.Max(pagingInfo.PageIndex, 0);
+			int actualPageIndex = Math.Max(pagingInfo.PageIndex, 1);
 			int actualPageSize = pagingInfo.PageSize > 0 ? pagingInfo.PageSize : defaultSize;
 
 			var ret = entities
-				.Skip(actualPageIndex + actualPageSize)
+				.Skip((actualPageIndex - 1) * actualPageSize)
 				.Take(actualPageSize);
 			return ret;
 		}
+
 	}
 }

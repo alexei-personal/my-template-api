@@ -1,5 +1,6 @@
-﻿using static System.Runtime.InteropServices.JavaScript.JSType;
-namespace Domain.Interfaces;
+﻿using AutoMapper;
+
+namespace Application.Mapping;
 
 public interface IMapFrom<T>
 {

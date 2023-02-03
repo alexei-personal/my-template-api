@@ -6,7 +6,7 @@
 public interface IPaginationInfo
 { 
 	/// <summary>
-	/// 0-indexed page index
+	/// 1-indexed page index
 	/// </summary>
 	public int PageIndex { get; }
 
