@@ -2,7 +2,7 @@
 using Common.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Common;
+namespace Application.Common.Models;
 
 /// <summary>
 /// a page of items along with the total count
@@ -42,7 +42,7 @@ public sealed record GenericPageResult<T> : IPaginationInfo
 		Total = totalCount;
 		PageIndex = pageInfo.PageIndex;
 		PageSize = pageInfo.PageSize;
-		PageCount = (int)Math.Ceiling(totalCount / (double) PageSize);
+		PageCount = (int)Math.Ceiling(totalCount / (double)PageSize);
 	}
 
 	public bool HasPrevious => PageIndex > 1;
