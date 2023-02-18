@@ -16,7 +16,7 @@ public static class HostExtensions
 	private static readonly TimeSpan MinCooldown = TimeSpan.FromSeconds(1);
 	private static readonly TimeSpan RetrialCooldown = TimeSpan.FromSeconds(2);
 
-	private static async Task<IHost> MigrateDatabaseAsync<TContext>(this IHost host, int retry = 0)
+	public static async Task<IHost> MigrateDatabaseAsync<TContext>(this IHost host, int retry = 0)
 		where TContext: DbContext
 	{
 		int retryForAvailability = retry;
