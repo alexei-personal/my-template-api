@@ -16,6 +16,7 @@ public static class ApplicationBuilderExtensions
 	{
 		ConfigureGlobalExceptionFilter(app);
 
+		//TODO: remove if not needed
 		//app.UseAuthentication();
 		//app.UseAuthorization();
 

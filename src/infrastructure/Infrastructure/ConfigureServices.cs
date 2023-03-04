@@ -55,9 +55,7 @@ public static class ConfigureServices
 		);
 
 		services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
-
-		// TODO: check to initialize security data
-		// services.AddScoped<ApplicationDbContextInitializer>();
+		services.AddScoped<ApplicationDbContextInitializer>();
 
 		return services;
 	}
@@ -96,23 +94,24 @@ public static class ConfigureServices
 	}
 	private static IServiceCollection AddIdentity(this IServiceCollection services)
 	{
-		// TODO: implement
-		//services
-		//	.AddDefaultIdentity<ApplicationUser>()
-		//	.AddRoles<IdentityRole>()
-		//	.AddEntityFrameworkStores<ApplicationDbContext>();
+		services
+			.AddDefaultIdentity<ApplicationUser>()
+			.AddRoles<IdentityRole>()
+			.AddEntityFrameworkStores<ApplicationDbContext>();
 
-		// services
-		// .AddIdentityServer()
-		// .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
+		services
+			.AddIdentityServer()
+			.AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
 
-		// TODO: restore to actual service
-		services.AddTransient<IIdentityService, TempIdentityService>();
+		services.AddTransient<IIdentityService, IdentityService>(); // TempIdentityService
 
-		//services
-		//	.AddAuthentication()
-		//	.AddIdentityServerJwt();
+		services
+			.AddAuthentication()
+			.AddIdentityServerJwt();
 
+		services.AddAuthorization();
+
+		// TODO: check
 		//services
 		//	.AddAuthorization(options =>
 		//	options.AddPolicy("CanDelete", policy => policy.RequireRole("Administrator")));

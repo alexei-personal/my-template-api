@@ -1,5 +1,6 @@
 ﻿using Application;
 using Common.Extensions;
+using Infrastructure.Persistence.AppDbContext;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -32,7 +33,9 @@ public static class HostExtensions
 			logger.WithModule(ApplicationConstants.LoggingModules.Init)
 				.LogInformation("Applying migrations for context {DbContextName}", typeof(TContext).Name);
 
-			await InitDb(context, logger);
+			var initializer = scope.ServiceProvider.GetRequiredService<ApplicationDbContextInitializer>();
+			await InitDb(context, initializer, logger);
+
 
 			logger.WithModule(ApplicationConstants.LoggingModules.Init)
 				.LogInformation("Migrations applied for context {DbContextName}", typeof(TContext).Name);
@@ -58,7 +61,8 @@ public static class HostExtensions
 		return host;
 	}
 
-	private static async Task InitDb<TContext>(TContext context, ILogger<TContext> logger) where TContext : DbContext
+	private static async Task InitDb<TContext>(TContext context,
+		ApplicationDbContextInitializer initializer, ILogger<TContext> logger) where TContext : DbContext
 	{
 		// prevent running the migrations for non main db (e.g. in-memory provider or similar)
 		bool isActualDbServer = context.Database.IsSqlServer();
@@ -68,5 +72,10 @@ public static class HostExtensions
 			return;
 
 		await context.Database.MigrateAsync();
+
+		// also apply the authentication related information that is not static
+		
+		await initializer.InitialiseAsync();
+		await initializer.SeedAsync();
 	}
 }

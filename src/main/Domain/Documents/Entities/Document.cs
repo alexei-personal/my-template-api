@@ -9,9 +9,9 @@ public class Document : BaseAuditableEntity
 
 	public string Title { get; set; } = default!;
 
-	public Color CategoryColor { get; set; } = Color.White;
+	public Color? CategoryColor { get; set; }
 
 	public bool IsActive { get; set; }
 
-	public IList<DocumentDetail> DocumentDetail { get; set; } = new List<DocumentDetail>();
+	public IList<DocumentDetail>? DocumentDetail { get; set; }
 }
