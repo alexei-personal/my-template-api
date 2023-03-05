@@ -26,7 +26,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "src\main\App
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.UnitTests", "tests\Common.UnitTests\Common.UnitTests.csproj", "{70C8DFB7-2A0B-48B7-AF16-3738D7E037EE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Migrations", "src\infra\Migrations\Migrations.csproj", "{F2BE1FA8-5D9F-4145-A636-72D8E3A6CE46}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Migrations", "src\infrastructure\Migrations\Migrations.csproj", "{F2BE1FA8-5D9F-4145-A636-72D8E3A6CE46}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "src\infrastructure\Infrastructure\Infrastructure.csproj", "{95699D36-2908-4385-B8A0-E0273EA814E0}"
 EndProject
