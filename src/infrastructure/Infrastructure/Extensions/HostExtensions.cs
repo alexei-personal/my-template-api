@@ -33,8 +33,7 @@ public static class HostExtensions
 			logger.WithModule(ApplicationConstants.LoggingModules.Init)
 				.LogInformation("Applying migrations for context {DbContextName}", typeof(TContext).Name);
 
-			var initializer = scope.ServiceProvider.GetRequiredService<ApplicationDbContextInitializer>();
-			await InitDb(context, initializer, logger);
+			await InitDb(context, logger);
 
 
 			logger.WithModule(ApplicationConstants.LoggingModules.Init)
@@ -61,8 +60,9 @@ public static class HostExtensions
 		return host;
 	}
 
-	private static async Task InitDb<TContext>(TContext context,
-		ApplicationDbContextInitializer initializer, ILogger<TContext> logger) where TContext : DbContext
+	private static async Task InitDb<TContext>(
+		TContext context,
+		ILogger<TContext> logger) where TContext : DbContext
 	{
 		// prevent running the migrations for non main db (e.g. in-memory provider or similar)
 		bool isActualDbServer = context.Database.IsSqlServer();
@@ -72,10 +72,5 @@ public static class HostExtensions
 			return;
 
 		await context.Database.MigrateAsync();
-
-		// also apply the authentication related information that is not static
-		
-		await initializer.InitialiseAsync();
-		await initializer.SeedAsync();
 	}
 }

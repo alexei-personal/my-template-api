@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿//using Microsoft.AspNetCore.Identity;
 
-namespace Infrastructure.Identity;
+//namespace Infrastructure.Identity;
 
-public class ApplicationUser : IdentityUser
-{
-}
+// TODO: redefine a local user if needed
+//public class ApplicationUser : IdentityUser
+//{
+//}

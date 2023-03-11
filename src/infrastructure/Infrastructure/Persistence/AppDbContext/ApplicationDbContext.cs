@@ -1,25 +1,20 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using Application.Common;
 using Domain.Base;
-using Duende.IdentityServer.EntityFramework.Options;
 using Infrastructure.Extensions;
-using Infrastructure.Identity;
 using Infrastructure.Persistence.Interceptors;
 using Infrastructure.Persistence.Seeding;
 using LinqToDB;
 using LinqToDB.Data;
 using LinqToDB.EntityFrameworkCore;
 using MediatR;
-using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.Extensions.Options;
 
 namespace Infrastructure.Persistence.AppDbContext;
 
-public partial class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>, IApplicationDbContext
+public partial class ApplicationDbContext : DbContext, IApplicationDbContext
 {
 	private readonly IMediator _mediator;
 	private readonly AuditableEntitySaveChangesInterceptor _auditableEntitySaveChangesInterceptor;
@@ -37,11 +32,9 @@ public partial class ApplicationDbContext : ApiAuthorizationDbContext<Applicatio
 
 	///
 	public ApplicationDbContext(
-		DbContextOptions<ApplicationDbContext> options,
-		IOptions<OperationalStoreOptions> operationalStoreOptions,
 		IMediator mediator,
-		AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor)
-		: base(options, operationalStoreOptions)
+		AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor,
+		DbContextOptions options) : base(options)
 	{
 		_mediator = mediator;
 		_auditableEntitySaveChangesInterceptor = auditableEntitySaveChangesInterceptor;

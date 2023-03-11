@@ -55,7 +55,6 @@ public static class ConfigureServices
 		);
 
 		services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
-		services.AddScoped<ApplicationDbContextInitializer>();
 
 		return services;
 	}
@@ -94,20 +93,18 @@ public static class ConfigureServices
 	}
 	private static IServiceCollection AddIdentity(this IServiceCollection services)
 	{
-		services
-			.AddDefaultIdentity<ApplicationUser>()
-			.AddRoles<IdentityRole>()
-			.AddEntityFrameworkStores<ApplicationDbContext>();
+		// TODO: check / remove
+		//services
+		//	.AddDefaultIdentity<ApplicationUser>()
+		//	.AddRoles<IdentityRole>()
+		//	.AddEntityFrameworkStores<ApplicationDbContext>();
+
+		//services
+		//	.AddIdentityServer()
+		//	.AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
 
 		services
-			.AddIdentityServer()
-			.AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
-
-		services.AddTransient<IIdentityService, IdentityService>(); // TempIdentityService
-
-		services
-			.AddAuthentication()
-			.AddIdentityServerJwt();
+			.AddAuthentication();
 
 		services.AddAuthorization();
 
