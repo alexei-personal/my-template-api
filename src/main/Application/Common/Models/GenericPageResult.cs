@@ -48,10 +48,10 @@ public sealed record GenericPageResult<T> : IPaginationInfo
 	public bool HasPrevious => PageIndex > 1;
 	public bool HasNext => PageIndex < PageCount;
 
-	public static async Task<GenericPageResult<T>> CreateAsync(IQueryable<T> source, IPaginationInfo pageInfo, CancellationToken token)
+	public static async Task<GenericPageResult<T>> CreateAsync(IQueryable<T> source, IPaginationInfo pageInfo, CancellationToken ct)
 	{
-		int count = await source.CountAsync(token);
-		var pageList = await source.ApplyPaging(pageInfo).ToListAsync(token);
+		int count = await source.CountAsync(ct);
+		var pageList = await source.ApplyPaging(pageInfo).ToListAsync(ct);
 		var ret = new GenericPageResult<T>(pageList, count, pageInfo);
 		return ret;
 	}

@@ -16,7 +16,7 @@ public class LoggingBehaviour<TRequest> : IRequestPreProcessor<TRequest>
 		_currentUserService = currentUserService;
 	}
 
-	public async Task Process(TRequest request, CancellationToken cancellationToken)
+	public async Task Process(TRequest request, CancellationToken ct)
 	{
 		string requestName = typeof(TRequest).Name;
 		string userId = _currentUserService.UserId ?? string.Empty;

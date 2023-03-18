@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using FastEndpoints;
 using FastEndpoints.Swagger;
 using Infrastructure.ExceptionHandling;
+using NSwag.AspNetCore;
 
 namespace Infrastructure.Extensions;
 
@@ -63,7 +64,13 @@ public static class ApplicationBuilderExtensions
 		{
 			c.ConfigureDefaults();
 
-			//TODO: configure OAuth2Client
+			c.OAuth2Client = new OAuth2ClientSettings
+			{
+				//TODO: read from config
+				ClientId = "",
+				AppName = "WebApi",
+				UsePkceWithAuthorizationCodeGrant = true
+			};
 		});
 	}
 

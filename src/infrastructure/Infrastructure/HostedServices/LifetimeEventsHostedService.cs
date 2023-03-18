@@ -24,7 +24,7 @@ internal class LifetimeEventsHostedService : IHostedService
 	}
 
 	// 3. Implemented by `IHostedService`, setup here your event registration. 
-	public Task StartAsync(CancellationToken cancellationToken)
+	public Task StartAsync(CancellationToken ct)
 	{
 		_appLifetime.ApplicationStarted.Register(OnStarted);
 		_appLifetime.ApplicationStopping.Register(OnStopping);
@@ -35,7 +35,7 @@ internal class LifetimeEventsHostedService : IHostedService
 
 	// 4. Implemented by `IHostedService`, setup here your shutdown registration.
 	//    If you have nothing to stop, then just return `Task.CompletedTask`
-	public Task StopAsync(CancellationToken cancellationToken)
+	public Task StopAsync(CancellationToken ct)
 	{
 		return Task.CompletedTask;
 	}

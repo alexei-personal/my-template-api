@@ -104,7 +104,13 @@ public static class ConfigureServices
 		//	.AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
 
 		services
-			.AddAuthentication();
+			.AddAuthentication("Bearer")
+			.AddJwtBearer("Bearer", options =>
+			{
+				//TODO: move these to config / secrets
+				options.Audience = "api1";
+				options.Authority = "https://localhost:5001";
+			});
 
 		services.AddAuthorization();
 

@@ -61,11 +61,11 @@ public partial class ApplicationDbContext : DbContext, IApplicationDbContext
 		optionsBuilder.AddInterceptors(_auditableEntitySaveChangesInterceptor);
 	}
 
-	public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+	public override async Task<int> SaveChangesAsync(CancellationToken ct = default)
 	{
 		await _mediator.DispatchDomainEvents(this);
 
-		return await base.SaveChangesAsync(cancellationToken);
+		return await base.SaveChangesAsync(ct);
 	}
 	#endregion
 
@@ -84,11 +84,11 @@ public partial class ApplicationDbContext : DbContext, IApplicationDbContext
 		return this.NonGenericSet(type);
 	}
 
-	public async Task<int> SaveChangesExAsync(CancellationToken token = default)
+	public async Task<int> SaveChangesExAsync(CancellationToken ct = default)
 	{
 		try
 		{
-			return await SaveChangesAsync(token);
+			return await SaveChangesAsync(ct);
 		}
 		catch (Exception)
 		{
@@ -117,24 +117,24 @@ public partial class ApplicationDbContext : DbContext, IApplicationDbContext
 		}
 	}
 
-	public async Task<int> SaveChangesWithIdentityInsertEnabledAsync<TEnt>(CancellationToken token = default)
+	public async Task<int> SaveChangesWithIdentityInsertEnabledAsync<TEnt>(CancellationToken ct = default)
 	{
 		var strategy = Database.CreateExecutionStrategy();
 		int ret = 0;
 
 		await strategy.ExecuteAsync(async () =>
 		{
-			await using var transaction = await Database.BeginTransactionAsync(token);
-			await SetIdentityInsertAsync<TEnt>(true, token);
-			ret = await SaveChangesExAsync(token);
-			await SetIdentityInsertAsync<TEnt>(false, token);
-			await transaction.CommitAsync(token);
+			await using var transaction = await Database.BeginTransactionAsync(ct);
+			await SetIdentityInsertAsync<TEnt>(true, ct);
+			ret = await SaveChangesExAsync(ct);
+			await SetIdentityInsertAsync<TEnt>(false, ct);
+			await transaction.CommitAsync(ct);
 		});
 
 		return ret;
 	}
 
-	private async Task SetIdentityInsertAsync<TEnt>(bool enabled, CancellationToken token)
+	private async Task SetIdentityInsertAsync<TEnt>(bool enabled, CancellationToken ct)
 	{
 		var entityType = Model.FindEntityType(typeof(TEnt));
 		if (entityType == null)
@@ -143,22 +143,22 @@ public partial class ApplicationDbContext : DbContext, IApplicationDbContext
 		string value = enabled ? "ON" : "OFF";
 		string fullTableName = $"{entityType?.GetSchema()}.{entityType?.GetTableName()}";
 		string query = $"SET IDENTITY_INSERT {fullTableName} {value}";
-		await Database.ExecuteSqlRawAsync(query, token);
+		await Database.ExecuteSqlRawAsync(query, ct);
 	}
 
-	public async Task RunInExplicitTransactionAsync(Func<Task> operation, CancellationToken token = default)
+	public async Task RunInExplicitTransactionAsync(Func<Task> operation, CancellationToken ct = default)
 	{
 		var strategy = Database.CreateExecutionStrategy();
 
 		await strategy.ExecuteAsync(async () =>
 		{
-			await using var transaction = await Database.BeginTransactionAsync(token);
+			await using var transaction = await Database.BeginTransactionAsync(ct);
 			await operation();
-			await transaction.CommitAsync(token);
+			await transaction.CommitAsync(ct);
 		});
 	}
 
-	public DbSet<TEnt> RemoveRange<TEnt>(Expression<Func<TEnt, bool>> predicate, CancellationToken token = default) where TEnt : class, new()
+	public DbSet<TEnt> RemoveRange<TEnt>(Expression<Func<TEnt, bool>> predicate, CancellationToken ct = default) where TEnt : class, new()
 	{
 		var set = Set<TEnt>();
 		var toRemove = set.Where(predicate).ToList();
@@ -166,12 +166,12 @@ public partial class ApplicationDbContext : DbContext, IApplicationDbContext
 		return set;
 	}
 
-	public async Task BulkInsertIntoIdTempTable(IEnumerable<int> ids, bool createTable = true, CancellationToken token = default)
+	public async Task BulkInsertIntoIdTempTable(IEnumerable<int> ids, bool createTable = true, CancellationToken ct = default)
 	{
 		if (createTable)
 			Linq2dbConnection.CreateTable<TempId>();
 
 		var toInsert = ids.Select(id => new TempId { Id = id });
-		await Linq2dbConnection.BulkCopyAsync(toInsert, cancellationToken: token);
+		await Linq2dbConnection.BulkCopyAsync(toInsert, cancellationToken: ct);
 	}
 }

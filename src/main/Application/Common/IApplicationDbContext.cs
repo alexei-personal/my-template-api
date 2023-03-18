@@ -37,35 +37,35 @@ public interface IApplicationDbContext
 	/// saves changes, but also provides additional functionality such as automatic changes
 	/// rollback on failure
 	/// </summary>
-	/// <param name="token"></param>
+	/// <param name="ct"></param>
 	/// <returns></returns>
-	Task<int> SaveChangesExAsync(CancellationToken token = default);
+	Task<int> SaveChangesExAsync(CancellationToken ct = default);
 
 	/// <summary>
 	/// save changes, but also allows to insert with identity insert on for a specific type
 	/// mostly useful for testing purposes
 	/// </summary>
 	/// <typeparam name="TEnt"></typeparam>
-	/// <param name="token"></param>
+	/// <param name="ct"></param>
 	/// <returns></returns>
-	Task<int> SaveChangesWithIdentityInsertEnabledAsync<TEnt>(CancellationToken token = default);
+	Task<int> SaveChangesWithIdentityInsertEnabledAsync<TEnt>(CancellationToken ct = default);
 
 	/// <summary>
 	/// executes 
 	/// </summary>
 	/// <param name="operation"></param>
-	/// <param name="token"></param>
+	/// <param name="ct"></param>
 	/// <returns></returns>
-	Task RunInExplicitTransactionAsync(Func<Task> operation, CancellationToken token = default);
+	Task RunInExplicitTransactionAsync(Func<Task> operation, CancellationToken ct = default);
 
 	/// <summary>
 	/// marks entities for deletion
 	/// </summary>
 	/// <typeparam name="TEnt"></typeparam>
 	/// <param name="predicate"></param>
-	/// <param name="token"></param>
+	/// <param name="ct"></param>
 	/// <returns></returns>
-	DbSet<TEnt> RemoveRange<TEnt>(Expression<Func<TEnt, bool>> predicate, CancellationToken token = default)
+	DbSet<TEnt> RemoveRange<TEnt>(Expression<Func<TEnt, bool>> predicate, CancellationToken ct = default)
 		where TEnt : class, new();
 
 	/// <summary>
@@ -78,5 +78,5 @@ public interface IApplicationDbContext
 	/// </summary>
 	ChangeTracker ChangeTracker { get; }
 
-	Task BulkInsertIntoIdTempTable(IEnumerable<int> ids, bool createTable = true, CancellationToken token = default);
+	Task BulkInsertIntoIdTempTable(IEnumerable<int> ids, bool createTable = true, CancellationToken ct = default);
 }
