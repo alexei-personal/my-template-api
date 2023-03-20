@@ -1,8 +1,9 @@
-﻿using WebApi.Endpoints.Base;
+﻿using FastEndpoints;
+using WebApi.Endpoints.Base;
 
 namespace WebApi.Endpoints.Test;
 
-internal sealed class EchoEndpoint : EndpointBase<EchoPayload, EchoPayload>
+public class EchoEndpoint : EndpointBase<EchoPayload, EchoPayload>
 {
 	private readonly ILogger<EchoEndpoint> _logger;
 
@@ -18,12 +19,13 @@ internal sealed class EchoEndpoint : EndpointBase<EchoPayload, EchoPayload>
 		Description(b => b
 				.Produces<EchoPayload>(StatusCodes.Status200OK, "application/json")
 				.Produces(StatusCodes.Status401Unauthorized), 
-			clearDefaults:true
+			clearDefaults:false
 		);
 
 		Summary(s =>
 		{
 			s.Summary = "quick test to echo the received payload";
+			s.RequestParam(r => r.Message, "message to echo back");
 		});
 
 		base.Configure();
@@ -37,7 +39,8 @@ internal sealed class EchoEndpoint : EndpointBase<EchoPayload, EchoPayload>
 	}
 }
 
-internal sealed class EchoPayload
+public class EchoPayload
 {
-	public string? Message { get; set; }
+	[QueryParam] 
+	public string Message { get; set; } = "";
 }
